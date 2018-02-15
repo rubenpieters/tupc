@@ -6,6 +6,9 @@ import Data.Array as Array
 import Data.Map as Map
 import Data.Set as Set
 
+import Data.Generic.Rep as Rep
+import Data.Generic.Rep.Eq (genericEq)
+
 -- https://github.com/nh2/haskell-ordnub
 ordNub :: forall a. (Ord a) =>
           Array a -> Array a
@@ -47,6 +50,13 @@ data Pos = Pos
   , yRight :: Int
   }
 
+instance showPos :: Show Pos where
+  show (Pos p) = "{ x: " <> show p.xTop <> " -- " <> show p.xBot <> ", y: " <> show p.yLeft <> " -- " <> show p.yRight <> " }"
+
+derive instance genericPos :: Rep.Generic Pos _
+instance eqPos :: Eq Pos where
+  eq = genericEq
+
 type Result a = Map.Map a FL
 
 firstLast' :: forall a. (Ord a) =>
@@ -72,20 +82,24 @@ addElem a index result = result # Map.alter f a
     f (Just (FL r)) = Just (FL (r { last= index }))
     f Nothing  = Just (FL { first: index, last: index })
 
-{-
 calcPos :: forall a. (Ord a) =>
            Array (Array a) -> Map.Map a Pos
-calcPos l = 
+calcPos l = combinedMap
   where
+    mapX :: Result a
     mapX = firstLast' l
+    mapY :: Result a
     mapY = firstLast' (transpose l)
-    combine (FL xFL) (FL yLR) = Pos
-      { xTop: xFL.first
-      , xBot: xFL.last
-      , yLeft: yLR.first
-      , yRight: yLR.last
+    mapXInj = mapX <#> (\(FL fl) -> Pos { xTop: fl.first, xBot: fl.last, yLeft: 0, yRight: 0 })
+    mapYInj = mapY <#> (\(FL fl) -> Pos { xTop: 0, xBot: 0, yLeft: fl.first, yRight: fl.last })
+    combinedMap = Map.unionWith combine mapXInj mapYInj
+    combine (Pos x) (Pos y) = Pos
+      { xTop: x.xTop
+      , xBot: x.xBot
+      , yLeft: y.yLeft
+      , yRight: y.yRight
       }
--}
+
 
 testData :: Array (Array String)
 testData =
@@ -95,4 +109,7 @@ testData =
   ]
 
 main :: Eff _ Unit
-main = pure unit
+main = do
+  logShow (firstLast' testData)
+  logShow (firstLast' (transpose testData))
+  logShow (calcPos testData)
