@@ -3,9 +3,7 @@ module ReadConfig where
 import Types
 
 import Data.Map as Map
-
 import Data.Int (fromString)
-
 import Data.String (Pattern(..), split, trim, joinWith)
 import Data.Foldable
 import Data.Traversable

@@ -1,6 +1,8 @@
 module Main where
 
 import Types
+import ReadConfig
+import Config.File
 
 import Data.Array as Array
 import Data.Map as Map
@@ -113,3 +115,4 @@ main = do
   logShow (firstLast' testData)
   logShow (firstLast' (transpose testData))
   logShow (calcPos testData)
+

@@ -8,4 +8,13 @@ import Data.Either as Exported
 import Data.Foldable as Exported
 
 import Control.Monad.Eff as Exported
-import Control.Monad.Eff.Console (logShow) as Exported
+import Control.Monad.Eff.Console (log, logShow) as Exported
+import Control.Monad.Eff.Exception (throw) as Exported
+
+type ConfigLines =
+  -- lines read from configuration part
+  -- # should be stripped from the start (TODO: make this into newtype)
+  { config :: Array String
+  -- lines read from data part
+  , content :: Array (Array String)
+  }
