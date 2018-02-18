@@ -12,7 +12,7 @@ import Test.Assert
 
 testExample1Data = { jsonConfig: { scaleX: 50, scaleY: 50 }, content: ["113", "113", "222"] }
 
-testExample1_rawToJsonConfigContent =
+testExample1_parseJsonConfigContent =
   parseJsonConfigContent { throw: Left } testExample1Data
 
 testExample1Output = Right $ Map.fromFoldable
@@ -26,4 +26,4 @@ testExample1Output = Right $ Map.fromFoldable
 
 main :: Eff _ Unit
 main = do
-  assert $ testExample1_rawToJsonConfigContent == testExample1Output
+  assert $ testExample1_parseJsonConfigContent == testExample1Output

@@ -11,7 +11,7 @@ import Content.Parse
 import Data.String (Pattern(..), split)
 import Data.Map as Map
 
-import Content.Parse (Pos(..)) as Exported
+import Types (Pos(..)) as Exported
 
 parseRaw :: forall f r.
              Monad f =>

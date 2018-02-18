@@ -2,12 +2,12 @@ module Config.File where
 
 import Types
 import Config.Parse
+import Config.Json
 
 import Data.Array as Array
 import Data.Map as Map
 import Data.String (Pattern(..), split, charAt, stripPrefix)
-
-import Data.Traversable
+import Data.Argonaut (stringify)
 
 rawToConfigContent :: forall f r.
                       Monad f =>
@@ -38,3 +38,12 @@ rawToJsonConfigContent k = do
   { config: config, content: content } <- rawToConfigContent k
   jsonConfig <- mkConfig k Map.empty config
   pure { jsonConfig: jsonConfig, content: content }
+
+writeMapPosToFile :: forall f r.
+                     Monad f =>
+                     { write :: String -> f Unit
+                     | r } ->
+                     Map.Map String Pos -> f Unit
+writeMapPosToFile k map = do
+  let json = mapPosToJson map
+  k.write (stringify json)
