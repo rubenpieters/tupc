@@ -47,20 +47,6 @@ instance eqFL :: Eq FL where
 instance showFL :: Show FL where
   show = genericShow
 
-newtype Pos = Pos
-  { xTop :: Int
-  , xBot :: Int
-  , yLeft :: Int
-  , yRight :: Int
-  }
-
-derive instance genericPos :: Rep.Generic Pos _
-instance eqPos :: Eq Pos where
-  eq = genericEq
-instance showPos :: Show Pos where
-  show = genericShow
-
-
 type Result a = Map.Map a FL
 
 toMapFL :: forall a. (Ord a) =>

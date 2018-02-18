@@ -6,6 +6,14 @@ import Data.Maybe as Exported
 import Data.Tuple as Exported
 import Data.Either as Exported
 import Data.Foldable as Exported
+import Data.Traversable as Exported
+
+import Prelude
+
+import Data.Argonaut (class EncodeJson, class DecodeJson, decodeJson, (:=), (~>), (.?))
+import Data.Generic.Rep as Rep
+import Data.Generic.Rep.Eq (genericEq)
+import Data.Generic.Rep.Show (genericShow)
 
 import Control.Monad.Eff as Exported
 import Control.Monad.Eff.Console (log, logShow) as Exported
@@ -35,3 +43,31 @@ type JsonConfigContent =
   { jsonConfig :: JsonConfig
   , content :: Content
   }
+
+newtype Pos = Pos
+  { xTop :: Int
+  , xBot :: Int
+  , yLeft :: Int
+  , yRight :: Int
+  }
+
+derive instance genericPos :: Rep.Generic Pos _
+instance eqPos :: Eq Pos where
+  eq = genericEq
+instance showPos :: Show Pos where
+  show = genericShow
+instance encodeJsonPos :: EncodeJson Pos where
+  encodeJson (Pos pos) =
+    "xTop" := pos.xTop
+    ~> "xBot" := pos.xBot
+    ~> "yLeft" := pos.yLeft
+    ~> "yRight" := pos.yRight
+instance decodeJsonPos :: DecodeJson Pos where
+  decodeJson json = do
+    obj <- decodeJson json
+    xTop <- obj .? "xTop"
+    xBot <- obj .? "xBot"
+    yLeft <- obj .? "yLeft"
+    yRight <- obj .? "yRight"
+    pure $ Pos { xTop, xBot, yLeft, yRight }
+
