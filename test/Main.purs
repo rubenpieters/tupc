@@ -6,6 +6,9 @@ import Config.Parse
 import Config.File
 import Tupc
 
+import Test.Config.File as Test.Config.File
+import Test.Config.Json as Test.Config.Json
+
 import Data.Map as Map
 
 import Node.Encoding (Encoding(..))
@@ -39,3 +42,5 @@ main = do
   assert $ (testConfig <#> _.scaleY) == Right 100
   fileMap <- testReadFile
   assert $ fileMap == manualMap
+  Test.Config.File.main
+  Test.Config.Json.main

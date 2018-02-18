@@ -11,10 +11,27 @@ import Control.Monad.Eff as Exported
 import Control.Monad.Eff.Console (log, logShow) as Exported
 import Control.Monad.Eff.Exception (throw) as Exported
 
-type ConfigLines =
+-- raw json representation of configuration parameters
+type JsonConfig =
+  { scaleX :: Int
+  , scaleY :: Int
+  }
+
+-- content in data section
+-- example:
+-- ["113",
+--  "113",
+--  "222"]
+type Content = Array String
+
+type ConfigContent =
   -- lines read from configuration part
-  -- # should be stripped from the start (TODO: make this into newtype)
+  -- # should be stripped from the start (TODO: make this into newtype?)
   { config :: Array String
-  -- lines read from data part
-  , content :: Array (Array String)
+  , content :: Content
+  }
+
+type JsonConfigContent =
+  { jsonConfig :: JsonConfig
+  , content :: Content
   }

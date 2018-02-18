@@ -4,21 +4,21 @@ module Tupc
   ) where
 
 import Types
-import Content.Parse (Pos(..), toMapPos)
-import Config.Parse
 import Config.File
+import Config.Json
+import Content.Parse
 
+import Data.String (Pattern(..), split)
 import Data.Map as Map
 
 import Content.Parse (Pos(..)) as Exported
 
 parseRaw :: forall f r.
-             (Monad f) =>
+             Monad f =>
              { throw :: forall a. String -> f a
              , rawContents :: f String
              | r } ->
              f (Map.Map String Pos)
 parseRaw k = do
-  { config: config, content: content } <- readRawFile k
-  parsedConfig <- mkConfig k Map.empty config
-  pure $ toMapPos content
+  jsonConfigContent <- rawToJsonConfigContent k
+  parseJsonConfigContent k jsonConfigContent
