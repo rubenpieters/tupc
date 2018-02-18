@@ -8,11 +8,6 @@ import Data.String (Pattern(..), split, trim, joinWith)
 import Data.Foldable
 import Data.Traversable
 
-type Config =
-  { scaleX :: Int
-  , scaleY :: Int
-  }
-
 parseInt :: forall f r.
             Applicative f =>
             { throw :: forall a. String -> f a
@@ -27,7 +22,7 @@ mkConfig :: forall l f r.
             Monad f =>
             { throw :: forall a. String -> f a
             | r } ->
-            Map.Map String String -> l String -> f Config
+            Map.Map String String -> l String -> f JsonConfig
 mkConfig k defaults configLines = do
   let result = configLines <#> split (Pattern "=")
                            <#> (_ <#> trim)
