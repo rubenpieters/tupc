@@ -1,9 +1,10 @@
 module Test.Main where
 
 import Types
-import Main
-import ReadConfig
+import Content.Parse
+import Config.Parse
 import Config.File
+import Tupc
 
 import Data.Map as Map
 
@@ -23,16 +24,11 @@ testData =
 
 testConfig = mkConfig { throw: Left } Map.empty ["scaleX = 50", "scaleY = 100"]
 
-testReadFile = testReadFileK { throw: throw, rawContents: readTextFile UTF8 "examples/test1.txt"}
-
-testReadFileK k = do
-  { config: config, content: content } <- readRawFile k
-  parsedConfig <- mkConfig k Map.empty config
-  pure $ calcPos content
+testReadFile = parseRaw { throw: throw, rawContents: readTextFile UTF8 "examples/test1.txt"}
 
 main :: Eff _ Unit
 main = do
-  let (calcMap :: Map.Map String Pos) = calcPos testData
+  let (calcMap :: Map.Map String Pos) = toMapPos testData
   let (manualMap :: Map.Map String Pos) = Map.fromFoldable
        [ (Tuple "1" (Pos { xBot: 1, xTop: 0, yLeft: 0, yRight: 1 }))
        , (Tuple "2" (Pos { xBot: 2, xTop: 2, yLeft: 0, yRight: 2 }))
