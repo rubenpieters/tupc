@@ -50,7 +50,7 @@ The following configurations are supported:
 | scale       | scale for both axes                                                                                                    | 1                 |
 | scaleX      | scale for x-axis                                                                                                       |                   |
 | scaleY      | scale for y-axis                                                                                                       |                   |
-| ignore      | these characters are ignored in the content section                                                                    | ['+','-','|','␣'] |
+| ignore      | these characters are ignored in the content section                                                                    | +,-,\|,␣           |
 | ignoreExtra | these characters are ignored in the content section, use this if you don't want to override the default ones in ignore |                   |
 | origin      | location for origin (where x=0 and y=0)                                                                                | {x: Left, y: Up}  |
 | directionX  | direction where x-axis increases                                                                                       | Right             |
