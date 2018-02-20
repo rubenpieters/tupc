@@ -1,10 +1,13 @@
 {
   "private": true,
   "scripts": {
-    "build": "pulp build",
+    "build": "pulp build -- --censor-lib --censor-codes=ImplicitImport,WildcardInferredType --strict",
     "test": "pulp test"
   },
   "devDependencies": {
     "pulp": "^12.0.1"
+  },
+  "dependencies": {
+    "purescript-psa": "^0.6.0"
   }
 }
