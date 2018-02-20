@@ -21,14 +21,13 @@ For example, the following positions:
 are the result of parsing the following file:
 
 ```
-# scaleX=50
-# scaleY=50
+# scale=50
 113
 113
 222
 ```
 
-Where `1` corresponds to the section in the top-left, `2` to the section in the top-right and `3` to the section in the bottom-left.
+Where `1` corresponds to the section in the top-left, `2` to the section in the bottom and `3` to the section in the top-right.
 
 Parsing will output data to a `Map`:
 
