@@ -45,10 +45,10 @@ type JsonConfigContent =
   }
 
 newtype Pos = Pos
-  { xTop :: Int
-  , xBot :: Int
-  , yLeft :: Int
-  , yRight :: Int
+  { xLeft :: Int
+  , xRight :: Int
+  , yTop :: Int
+  , yBot :: Int
   }
 
 derive instance genericPos :: Rep.Generic Pos _
@@ -58,16 +58,16 @@ instance showPos :: Show Pos where
   show = genericShow
 instance encodeJsonPos :: EncodeJson Pos where
   encodeJson (Pos pos) =
-    "xTop" := pos.xTop
-    ~> "xBot" := pos.xBot
-    ~> "yLeft" := pos.yLeft
-    ~> "yRight" := pos.yRight
+    "xLeft" := pos.xLeft
+    ~> "xRight" := pos.xRight
+    ~> "yTop" := pos.yTop
+    ~> "yBot" := pos.yBot
 instance decodeJsonPos :: DecodeJson Pos where
   decodeJson json = do
     obj <- decodeJson json
-    xTop <- obj .? "xTop"
-    xBot <- obj .? "xBot"
-    yLeft <- obj .? "yLeft"
-    yRight <- obj .? "yRight"
-    pure $ Pos { xTop, xBot, yLeft, yRight }
+    xLeft <- obj .? "xLeft"
+    xRight <- obj .? "xRight"
+    yTop <- obj .? "yTop"
+    yBot <- obj .? "yBot"
+    pure $ Pos { xLeft, xRight, yTop, yBot }
 

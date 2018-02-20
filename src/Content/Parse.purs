@@ -75,16 +75,16 @@ toMapPos :: forall a. (Ord a) =>
 toMapPos l = combinedMap
   where
     mapX :: Result a
-    mapX = toMapFL l
+    mapX = toMapFL (transpose l)
     mapY :: Result a
-    mapY = toMapFL (transpose l)
-    mapXInj = mapX <#> (\(FL fl) -> Pos { xTop: fl.first, xBot: fl.last, yLeft: 0, yRight: 0 })
-    mapYInj = mapY <#> (\(FL fl) -> Pos { xTop: 0, xBot: 0, yLeft: fl.first, yRight: fl.last })
+    mapY = toMapFL l
+    mapXInj = mapX <#> (\(FL fl) -> Pos { xLeft: fl.first, xRight: (fl.last + 1), yTop: 0, yBot: 0 })
+    mapYInj = mapY <#> (\(FL fl) -> Pos { xLeft: 0, xRight: 0, yTop: fl.first, yBot: (fl.last + 1) })
     combinedMap = Map.unionWith combine mapXInj mapYInj
     combine (Pos x) (Pos y) = Pos
-      { xTop: x.xTop
-      , xBot: x.xBot
-      , yLeft: y.yLeft
-      , yRight: y.yRight
+      { xLeft: x.xLeft
+      , xRight: x.xRight
+      , yTop: y.yTop
+      , yBot: y.yBot
       }
 

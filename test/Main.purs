@@ -33,14 +33,19 @@ main :: Eff _ Unit
 main = do
   let (calcMap :: Map.Map String Pos) = toMapPos testData
   let (manualMap :: Map.Map String Pos) = Map.fromFoldable
-       [ (Tuple "1" (Pos { xBot: 1, xTop: 0, yLeft: 0, yRight: 1 }))
-       , (Tuple "2" (Pos { xBot: 2, xTop: 2, yLeft: 0, yRight: 2 }))
-       , (Tuple "3" (Pos { xBot: 1, xTop: 0, yLeft: 2, yRight: 2 }))
+       [ (Tuple "1" (Pos { xLeft: 0, xRight: 2, yTop: 0, yBot: 2 }))
+       , (Tuple "2" (Pos { xLeft: 0, xRight: 3, yTop: 2, yBot: 3 }))
+       , (Tuple "3" (Pos { xLeft: 2, xRight: 3, yTop: 0, yBot: 2 }))
+       ]
+  let (manualMapScaled :: Map.Map String Pos) = Map.fromFoldable
+       [ (Tuple "1" (Pos { xLeft: 0, xRight: 100, yTop: 0, yBot: 100 }))
+       , (Tuple "2" (Pos { xLeft: 0, xRight: 150, yTop: 100, yBot: 150 }))
+       , (Tuple "3" (Pos { xLeft: 100, xRight: 150, yTop: 0, yBot: 100 }))
        ]
   assert $ calcMap == manualMap
   assert $ (testConfig <#> _.scaleX) == Right 50
   assert $ (testConfig <#> _.scaleY) == Right 100
   fileMap <- testReadFile
-  assert $ fileMap == manualMap
+  assert $ fileMap == manualMapScaled
   Test.Config.File.main
   Test.Config.Json.main

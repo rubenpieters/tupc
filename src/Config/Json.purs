@@ -3,6 +3,7 @@ module Config.Json where
 import Types
 import Content.Parse
 import Config.Parse
+import Config.Apply
 
 import Data.Map as Map
 import Data.String (Pattern(..), split)
@@ -15,7 +16,8 @@ parseJsonConfigContent :: forall f r.
                           JsonConfigContent -> f (Map.Map String Pos)
 parseJsonConfigContent k { jsonConfig: jsonConfig, content: content } = do
   let contentArray = content <#> split (Pattern "")
-  pure $ toMapPos contentArray
+  let unprocessedMapPos = toMapPos contentArray
+  pure $ unprocessedMapPos # applyConfig jsonConfig
 
 mapPosToJson :: Map.Map String Pos -> Json
 mapPosToJson map = encodeJson map
