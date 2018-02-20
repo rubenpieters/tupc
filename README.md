@@ -6,6 +6,7 @@ This library parses a textbased & visual representation to create UI positions.
 
 For example, the following positions:
 
+```
 (0,0) ----- (100,0) ---- (150,0)
   |             |            |
   |             |            |
@@ -15,6 +16,7 @@ For example, the following positions:
   |             |            |
   |             |            |
 (0,150) ---------------- (150,150)
+```
 
 are the result of parsing the following file:
 
@@ -44,16 +46,16 @@ Configuration parameters are specified by lines starting with `#` and then provi
 
 The following configurations are supported:
 
-| parameter   | info                                                                                                                   | default value    |
-|-------------|------------------------------------------------------------------------------------------------------------------------|------------------|
-| scale       | scale for both axes                                                                                                    | 1                |
-| scaleX      | scale for x-axis                                                                                                       |                  |
-| scaleY      | scale for y-axis                                                                                                       |                  |
-| ignore      | these characters are ignored in the content section                                                                    | [+,-,|, ]        |
-| ignoreExtra | these characters are ignored in the content section, use this if you don't want to override the default ones in ignore |                  |
-| origin      | location for origin (where x=0 and y=0)                                                                                | {x: Left, y: Up} |
-| directionX  | direction where x-axis increases                                                                                       | Right            |
-| directionY  | direction where y-axis increases                                                                                       | Down             |
+| parameter   | info                                                                                                                   | default value     |
+|-------------|------------------------------------------------------------------------------------------------------------------------|-------------------|
+| scale       | scale for both axes                                                                                                    | 1                 |
+| scaleX      | scale for x-axis                                                                                                       |                   |
+| scaleY      | scale for y-axis                                                                                                       |                   |
+| ignore      | these characters are ignored in the content section                                                                    | ['+','-','|',' '] |
+| ignoreExtra | these characters are ignored in the content section, use this if you don't want to override the default ones in ignore |                   |
+| origin      | location for origin (where x=0 and y=0)                                                                                | {x: Left, y: Up}  |
+| directionX  | direction where x-axis increases                                                                                       | Right             |
+| directionY  | direction where y-axis increases                                                                                       | Down              |
 
 # Content
 
