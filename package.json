@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "pulp build -- --censor-lib --censor-codes=ImplicitImport,WildcardInferredType --strict",
+    "build": "pulp build -- --censor-lib --censor-codes=ImplicitImport,ImplicitQualifiedImport,WildcardInferredType --strict",
     "test": "pulp test"
   },
   "devDependencies": {

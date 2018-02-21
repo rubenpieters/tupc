@@ -5,8 +5,6 @@ import Types
 import Data.Map as Map
 import Data.Int (fromString)
 import Data.String (Pattern(..), split, trim, joinWith)
-import Data.Foldable
-import Data.Traversable
 
 parseInt :: forall f r.
             Applicative f =>
@@ -28,24 +26,16 @@ mkConfig k defaults configLines = do
                            <#> (_ <#> trim)
   result' <- for result (mkConfigKeyVal k)
   let map = Map.fromFoldable result'
-  scaleX <- findValue k "scaleX" map >>= parseInt k
-  scaleY <- findValue k "scaleY" map >>= parseInt k
+  scaleX <- findValue "scaleX" map >>= parseInt k
+  scaleY <- findValue "scaleY" map >>= parseInt k
   pure { scaleX: scaleX, scaleY: scaleY }
   where
-    findValue :: forall f r.
-                 Applicative f =>
-                 { throw :: forall a. String -> f a
-                 | r } ->
-                 String -> Map.Map String String -> f String
-    findValue k key map = case map # Map.lookup key of
+    findValue :: String -> Map.Map String String -> f String
+    findValue key map = case map # Map.lookup key of
         Just val -> pure val
-        Nothing -> orDefault k key defaults
-    orDefault :: forall f r.
-                 Applicative f =>
-                 { throw :: forall a. String -> f a
-                 | r } ->
-                 String -> Map.Map String String -> f String
-    orDefault k key defaults = case defaults # Map.lookup key of
+        Nothing -> orDefault key
+    orDefault :: String -> f String
+    orDefault key = case defaults # Map.lookup key of
         Just val -> pure val
         Nothing -> k.throw ("No value given for/no default value for" <> show key <> ". Proposed action: provide value")
 

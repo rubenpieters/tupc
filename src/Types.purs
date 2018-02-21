@@ -8,17 +8,17 @@ import Data.Either as Exported
 import Data.Foldable as Exported
 import Data.Traversable as Exported
 
+import Control.Monad.Eff as Exported
+import Control.Monad.Eff.Console (log, logShow) as Exported
+import Control.Monad.Eff.Exception (throw) as Exported
+
+
 import Prelude
 
 import Data.Argonaut (class EncodeJson, class DecodeJson, decodeJson, (:=), (~>), (.?))
 import Data.Generic.Rep as Rep
 import Data.Generic.Rep.Eq (genericEq)
 import Data.Generic.Rep.Show (genericShow)
-
-import Control.Monad.Eff as Exported
-import Control.Monad.Eff.Console (log, logShow) as Exported
-import Control.Monad.Eff.Exception (throw) as Exported
-
 -- raw json representation of configuration parameters
 type JsonConfig =
   { scaleX :: Int

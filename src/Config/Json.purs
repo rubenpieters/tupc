@@ -2,7 +2,6 @@ module Config.Json where
 
 import Types
 import Content.Parse
-import Config.Parse
 import Config.Apply
 
 import Data.Map as Map

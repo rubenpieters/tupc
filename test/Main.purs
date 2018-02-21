@@ -3,7 +3,6 @@ module Test.Main where
 import Types
 import Content.Parse
 import Config.Parse
-import Config.File
 import Tupc
 
 import Test.Config.File as Test.Config.File
@@ -12,7 +11,6 @@ import Test.Config.Json as Test.Config.Json
 import Data.Map as Map
 
 import Node.Encoding (Encoding(..))
-import Node.Path (FilePath())
 import Node.FS.Sync (readTextFile)
 
 import Test.Assert
@@ -24,9 +22,10 @@ testData =
   , ["2", "2", "2"]
   ]
 
-
+testConfig :: Either String JsonConfig
 testConfig = mkConfig { throw: Left } Map.empty ["scaleX = 50", "scaleY = 100"]
 
+testReadFile :: Eff _ (Map.Map String Pos)
 testReadFile = parseRaw { throw: throw, rawContents: readTextFile UTF8 "examples/test1.txt"}
 
 main :: Eff _ Unit
