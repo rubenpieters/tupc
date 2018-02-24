@@ -22,8 +22,8 @@ testData =
   , ['2', '2', '2']
   ]
 
-testConfig :: Either String JsonConfig
-testConfig = mkConfig { throw: Left } Map.empty ["scaleX = 50", "scaleY = 100"]
+testConfig :: Eff _ JsonConfig
+testConfig = mkConfig { throw: throw } tupcDefaults ["scaleX = 50", "scaleY = 100"]
 
 testReadFile :: Eff _ (Map.Map Char Pos)
 testReadFile = parseRaw { throw: throw, rawContents: readTextFile UTF8 "examples/test1.txt"}
@@ -42,8 +42,9 @@ main = do
        , (Tuple '3' (Pos { xLeft: 100, xRight: 150, yTop: 0, yBot: 100 }))
        ]
   assert $ calcMap == manualMap
-  assert $ (testConfig <#> _.scaleX) == Right 50
-  assert $ (testConfig <#> _.scaleY) == Right 100
+  testConfig' <- testConfig
+  assert $ testConfig'.scaleX == Just 50
+  assert $ testConfig'.scaleY == Just 100
   fileMap <- testReadFile
   assert $ fileMap == manualMapScaled
   Test.Config.File.main

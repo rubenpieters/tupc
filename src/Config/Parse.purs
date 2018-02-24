@@ -26,18 +26,26 @@ mkConfig k defaults configLines = do
                            <#> (_ <#> trim)
   result' <- for result (mkConfigKeyVal k)
   let map = Map.fromFoldable result'
-  scaleX <- findValue "scaleX" map >>= parseInt k
-  scaleY <- findValue "scaleY" map >>= parseInt k
-  pure { scaleX: scaleX, scaleY: scaleY }
+  scaleX <- for (findOptValue "scaleX" map) (parseInt k)
+  scaleY <- for (findOptValue "scaleY" map) (parseInt k)
+  scale <- findReqValue "scale" map >>= parseInt k
+  pure { scale: scale
+       , scaleX: scaleX
+       , scaleY: scaleY
+       }
   where
-    findValue :: String -> Map.Map String String -> f String
-    findValue key map = case map # Map.lookup key of
+    findReqValue :: String -> Map.Map String String -> f String
+    findReqValue key map = case map # Map.lookup key of
         Just val -> pure val
         Nothing -> orDefault key
     orDefault :: String -> f String
     orDefault key = case defaults # Map.lookup key of
         Just val -> pure val
         Nothing -> k.throw ("No value given for/no default value for" <> show key <> ". Proposed action: provide value")
+    findOptValue :: String -> Map.Map String String -> Maybe String
+    findOptValue key map = case map # Map.lookup key of
+        Just val -> Just val
+        Nothing -> Nothing
 
 type ConfigKeyVal = Tuple String String
 

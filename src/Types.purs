@@ -15,14 +15,25 @@ import Control.Monad.Eff.Exception (throw) as Exported
 
 import Prelude
 
+import Data.Maybe
+import Data.Tuple
+import Data.Map as Map
+
 import Data.Argonaut (class EncodeJson, class DecodeJson, decodeJson, (:=), (~>), (.?))
 import Data.Generic.Rep as Rep
 import Data.Generic.Rep.Eq (genericEq)
 import Data.Generic.Rep.Show (genericShow)
+
 -- raw json representation of configuration parameters
 type JsonConfig =
-  { scaleX :: Int
-  , scaleY :: Int
+  { scale :: Int
+  , scaleX :: Maybe Int
+  , scaleY :: Maybe Int
+--  , ignore :: [Char]
+--  , ignoreExtra :: [Char]
+--  , origin :: { x: DirectionX, y: DirectionY }
+--  , directionX :: DirectionX
+--  , directionY :: DirectionY
   }
 
 -- content in data section
@@ -71,3 +82,7 @@ instance decodeJsonPos :: DecodeJson Pos where
     yBot <- obj .? "yBot"
     pure $ Pos { xLeft, xRight, yTop, yBot }
 
+tupcDefaults :: Map.Map String String
+tupcDefaults = Map.fromFoldable
+  [ Tuple "scale" "1"
+  ]

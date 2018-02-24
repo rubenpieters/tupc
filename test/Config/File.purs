@@ -14,7 +14,7 @@ testExample1Data = ["# scaleX = 50", "# scaleY = 50", "113", "113", "222"] # joi
 testExample1_rawToJsonConfigContent =
   rawToJsonConfigContent { throw: Left, rawContents: pure testExample1Data }
 
-testExample1Output = Right { jsonConfig: { scaleX: 50, scaleY: 50 }, content: ["113", "113", "222"] }
+testExample1Output = Right { jsonConfig: { scaleX: Just 50, scaleY: Just 50 }, content: ["113", "113", "222"] }
 
 -- main
 

@@ -10,7 +10,7 @@ import Test.Assert
 -- example 1 -- parseJsonConfigContent
 
 testExample1Data :: JsonConfigContent
-testExample1Data = { jsonConfig: { scaleX: 50, scaleY: 50 }, content: ["113", "113", "222"] }
+testExample1Data = { jsonConfig: { scale: 50, scaleX: Nothing, scaleY: Nothing }, content: ["113", "113", "222"] }
 
 testExample1_parseJsonConfigContent :: Either String (Map.Map Char Pos)
 testExample1_parseJsonConfigContent =

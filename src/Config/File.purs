@@ -36,7 +36,7 @@ rawToJsonConfigContent :: forall f r.
                           f JsonConfigContent
 rawToJsonConfigContent k = do
   { config: config, content: content } <- rawToConfigContent k
-  jsonConfig <- mkConfig k Map.empty config
+  jsonConfig <- mkConfig k tupcDefaults config
   pure { jsonConfig: jsonConfig, content: content }
 
 writeMapPosToFile :: forall f r.
