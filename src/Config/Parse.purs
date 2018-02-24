@@ -4,7 +4,7 @@ import Types
 
 import Data.Map as Map
 import Data.Int (fromString)
-import Data.String (Pattern(..), split, trim, joinWith)
+import Data.String (Pattern(..), split, trim, joinWith, toCharArray)
 
 parseInt :: forall f r.
             Applicative f =>
@@ -53,6 +53,8 @@ mkConfig k defaults configLines = do
   directionY <- findReqValue "directionY" map >>= parseDirectionY k
   originX <- findReqValue "originX" map >>= parseDirectionX k
   originY <- findReqValue "originY" map >>= parseDirectionY k
+  ignore <- findReqValue "ignore" map <#> toCharArray
+  ignoreExtra <- findReqValue "ignoreExtra" map <#> toCharArray
   pure { scale: scale
        , scaleX: scaleX
        , scaleY: scaleY
@@ -60,6 +62,8 @@ mkConfig k defaults configLines = do
        , directionY: directionY
        , originX: originX
        , originY: originY
+       , ignore: ignore
+       , ignoreExtra: ignoreExtra
        }
   where
     findReqValue :: String -> Map.Map String String -> f String

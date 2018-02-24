@@ -15,7 +15,8 @@ parseJsonConfigContent :: forall f r.
                           JsonConfigContent -> f (Map.Map Char Pos)
 parseJsonConfigContent k { jsonConfig: jsonConfig, content: content } = do
   let contentArray = content <#> toCharArray
-  let unprocessedMapPos = contentArray # toMapPos
+  let ignored = jsonConfig.ignore <> jsonConfig.ignoreExtra
+  let unprocessedMapPos = contentArray # toMapPos ignored
   let bounds = contentArray # getBounds
   pure $ unprocessedMapPos # applyConfig jsonConfig bounds
 

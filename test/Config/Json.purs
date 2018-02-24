@@ -18,6 +18,8 @@ testExample1Data =
                 , directionY: YDown
                 , originX: XLeft
                 , originY: YUp
+                , ignore: []
+                , ignoreExtra: []
                 }
   , content: ["113", "113", "222"] }
 

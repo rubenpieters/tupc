@@ -49,8 +49,8 @@ type JsonConfig =
   { scale :: Int
   , scaleX :: Maybe Int
   , scaleY :: Maybe Int
---  , ignore :: [Char]
---  , ignoreExtra :: [Char]
+  , ignore :: Array Char
+  , ignoreExtra :: Array Char
   , originX :: DirectionX
   , originY :: DirectionY
   , directionX :: DirectionX
@@ -110,4 +110,6 @@ tupcDefaults = Map.fromFoldable
   , Tuple "directionY" "Down"
   , Tuple "originX" "Left"
   , Tuple "originY" "Up"
+  , Tuple "ignore" "+-|, "
+  , Tuple "ignoreExtra" ""
   ]

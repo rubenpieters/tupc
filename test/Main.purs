@@ -30,7 +30,7 @@ testReadFile = parseRaw { throw: throw, rawContents: readTextFile UTF8 "examples
 
 main :: Eff _ Unit
 main = do
-  let (calcMap :: Map.Map Char Pos) = toMapPos testData
+  let (calcMap :: Map.Map Char Pos) = toMapPos [] testData
   let (manualMap :: Map.Map Char Pos) = Map.fromFoldable
        [ (Tuple '1' (Pos { xLeft: 0, xRight: 2, yTop: 0, yBot: 2 }))
        , (Tuple '2' (Pos { xLeft: 0, xRight: 3, yTop: 2, yBot: 3 }))

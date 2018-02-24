@@ -39,7 +39,8 @@ newtype FL = FL
   }
 
 instance semigroupFL :: Semigroup FL where
-  append (FL fl1) (FL fl2) = FL { first: min fl1.first fl2.first, last: max fl1.last fl2.last }
+  append (FL fl1) (FL fl2) = FL { first: min fl1.first fl2.first
+                                , last: max fl1.last fl2.last }
 
 derive instance genericFL :: Rep.Generic FL _
 instance eqFL :: Eq FL where
@@ -50,13 +51,15 @@ instance showFL :: Show FL where
 type Result a = Map.Map a FL
 
 toMapFL :: forall a. (Ord a) =>
-           Array (Array a) -> Result a
-toMapFL = go 0
+           Array a -> Array (Array a) -> Result a
+toMapFL ignored = go 0
   where
     go :: Int -> Array (Array a) -> Result a
     go index l = case uncons l of
       Just { head: new, tail: t} ->
-        let (newFiltered :: Array a) = ordNub new
+        let (newFiltered :: Array a)
+              = new # ordNub
+                    # Array.filter (\x -> not (elem x ignored))
             combine map v = map # addElem v index
             mapI = newFiltered # foldl combine Map.empty
             mapRec = go (index+1) t
@@ -71,15 +74,23 @@ toMapFL = go 0
     f index Nothing  = Just (FL { first: index, last: index })
 
 toMapPos :: forall a. (Ord a) =>
-            Array (Array a) -> Map.Map a Pos
-toMapPos l = combinedMap
+            Array a -> Array (Array a) -> Map.Map a Pos
+toMapPos ignored l = combinedMap
   where
     mapX :: Result a
-    mapX = toMapFL (transpose l)
+    mapX = toMapFL ignored (transpose l)
     mapY :: Result a
-    mapY = toMapFL l
-    mapXInj = mapX <#> (\(FL fl) -> Pos { xLeft: fl.first, xRight: (fl.last + 1), yTop: 0, yBot: 0 })
-    mapYInj = mapY <#> (\(FL fl) -> Pos { xLeft: 0, xRight: 0, yTop: fl.first, yBot: (fl.last + 1) })
+    mapY = toMapFL ignored l
+    mapXInj = mapX <#> (\(FL fl) -> Pos { xLeft: fl.first
+                                        , xRight: (fl.last + 1)
+                                        , yTop: 0
+                                        , yBot: 0
+                                        })
+    mapYInj = mapY <#> (\(FL fl) -> Pos { xLeft: 0
+                                        , xRight: 0
+                                        , yTop: fl.first
+                                        , yBot: (fl.last + 1)
+                                        })
     combinedMap = Map.unionWith combine mapXInj mapYInj
     combine (Pos x) (Pos y) = Pos
       { xLeft: x.xLeft
