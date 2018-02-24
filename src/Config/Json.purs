@@ -15,8 +15,9 @@ parseJsonConfigContent :: forall f r.
                           JsonConfigContent -> f (Map.Map Char Pos)
 parseJsonConfigContent k { jsonConfig: jsonConfig, content: content } = do
   let contentArray = content <#> toCharArray
-  let unprocessedMapPos = toMapPos contentArray
-  pure $ unprocessedMapPos # applyConfig jsonConfig
+  let unprocessedMapPos = contentArray # toMapPos
+  let bounds = contentArray # getBounds
+  pure $ unprocessedMapPos # applyConfig jsonConfig bounds
 
 mapPosToJson :: Map.Map String Pos -> Json
 mapPosToJson map = encodeJson map

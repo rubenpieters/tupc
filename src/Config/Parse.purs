@@ -51,11 +51,15 @@ mkConfig k defaults configLines = do
   scale <- findReqValue "scale" map >>= parseInt k
   directionX <- findReqValue "directionX" map >>= parseDirectionX k
   directionY <- findReqValue "directionY" map >>= parseDirectionY k
+  originX <- findReqValue "originX" map >>= parseDirectionX k
+  originY <- findReqValue "originY" map >>= parseDirectionY k
   pure { scale: scale
        , scaleX: scaleX
        , scaleY: scaleY
        , directionX: directionX
        , directionY: directionY
+       , originX: originX
+       , originY: originY
        }
   where
     findReqValue :: String -> Map.Map String String -> f String

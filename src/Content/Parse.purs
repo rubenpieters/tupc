@@ -88,3 +88,10 @@ toMapPos l = combinedMap
       , yBot: y.yBot
       }
 
+getBounds :: forall a.
+          Array (Array a) -> { maxX :: Int, maxY :: Int }
+getBounds a = { maxX: maxX, maxY: maxY}
+  where
+    maxX = (a <#> length) # maximum
+                          # fromMaybe 0
+    maxY = a # length

@@ -51,7 +51,8 @@ type JsonConfig =
   , scaleY :: Maybe Int
 --  , ignore :: [Char]
 --  , ignoreExtra :: [Char]
---  , origin :: { x: DirectionX, y: DirectionY }
+  , originX :: DirectionX
+  , originY :: DirectionY
   , directionX :: DirectionX
   , directionY :: DirectionY
   }
@@ -107,4 +108,6 @@ tupcDefaults = Map.fromFoldable
   [ Tuple "scale" "1"
   , Tuple "directionX" "Right"
   , Tuple "directionY" "Down"
+  , Tuple "originX" "Left"
+  , Tuple "originY" "Up"
   ]
