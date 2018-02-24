@@ -15,31 +15,31 @@ import Node.FS.Sync (readTextFile)
 
 import Test.Assert
 
-testData :: Array (Array String)
+testData :: Array (Array Char)
 testData =
-  [ ["1", "1", "3"]
-  , ["1", "1", "3"]
-  , ["2", "2", "2"]
+  [ ['1', '1', '3']
+  , ['1', '1', '3']
+  , ['2', '2', '2']
   ]
 
 testConfig :: Either String JsonConfig
 testConfig = mkConfig { throw: Left } Map.empty ["scaleX = 50", "scaleY = 100"]
 
-testReadFile :: Eff _ (Map.Map String Pos)
+testReadFile :: Eff _ (Map.Map Char Pos)
 testReadFile = parseRaw { throw: throw, rawContents: readTextFile UTF8 "examples/test1.txt"}
 
 main :: Eff _ Unit
 main = do
-  let (calcMap :: Map.Map String Pos) = toMapPos testData
-  let (manualMap :: Map.Map String Pos) = Map.fromFoldable
-       [ (Tuple "1" (Pos { xLeft: 0, xRight: 2, yTop: 0, yBot: 2 }))
-       , (Tuple "2" (Pos { xLeft: 0, xRight: 3, yTop: 2, yBot: 3 }))
-       , (Tuple "3" (Pos { xLeft: 2, xRight: 3, yTop: 0, yBot: 2 }))
+  let (calcMap :: Map.Map Char Pos) = toMapPos testData
+  let (manualMap :: Map.Map Char Pos) = Map.fromFoldable
+       [ (Tuple '1' (Pos { xLeft: 0, xRight: 2, yTop: 0, yBot: 2 }))
+       , (Tuple '2' (Pos { xLeft: 0, xRight: 3, yTop: 2, yBot: 3 }))
+       , (Tuple '3' (Pos { xLeft: 2, xRight: 3, yTop: 0, yBot: 2 }))
        ]
-  let (manualMapScaled :: Map.Map String Pos) = Map.fromFoldable
-       [ (Tuple "1" (Pos { xLeft: 0, xRight: 100, yTop: 0, yBot: 100 }))
-       , (Tuple "2" (Pos { xLeft: 0, xRight: 150, yTop: 100, yBot: 150 }))
-       , (Tuple "3" (Pos { xLeft: 100, xRight: 150, yTop: 0, yBot: 100 }))
+  let (manualMapScaled :: Map.Map Char Pos) = Map.fromFoldable
+       [ (Tuple '1' (Pos { xLeft: 0, xRight: 100, yTop: 0, yBot: 100 }))
+       , (Tuple '2' (Pos { xLeft: 0, xRight: 150, yTop: 100, yBot: 150 }))
+       , (Tuple '3' (Pos { xLeft: 100, xRight: 150, yTop: 0, yBot: 100 }))
        ]
   assert $ calcMap == manualMap
   assert $ (testConfig <#> _.scaleX) == Right 50
