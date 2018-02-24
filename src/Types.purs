@@ -24,6 +24,26 @@ import Data.Generic.Rep as Rep
 import Data.Generic.Rep.Eq (genericEq)
 import Data.Generic.Rep.Show (genericShow)
 
+data DirectionX
+  = XLeft
+  | XRight
+
+derive instance genericDirectionX :: Rep.Generic DirectionX _
+instance eqDirectionX :: Eq DirectionX where
+  eq = genericEq
+instance showDirectionX :: Show DirectionX where
+  show = genericShow
+
+data DirectionY
+  = YUp
+  | YDown
+
+derive instance genericDirectionY :: Rep.Generic DirectionY _
+instance eqDirectionY :: Eq DirectionY where
+  eq = genericEq
+instance showDirectionY :: Show DirectionY where
+  show = genericShow
+
 -- raw json representation of configuration parameters
 type JsonConfig =
   { scale :: Int
@@ -32,8 +52,8 @@ type JsonConfig =
 --  , ignore :: [Char]
 --  , ignoreExtra :: [Char]
 --  , origin :: { x: DirectionX, y: DirectionY }
---  , directionX :: DirectionX
---  , directionY :: DirectionY
+  , directionX :: DirectionX
+  , directionY :: DirectionY
   }
 
 -- content in data section
@@ -85,4 +105,6 @@ instance decodeJsonPos :: DecodeJson Pos where
 tupcDefaults :: Map.Map String String
 tupcDefaults = Map.fromFoldable
   [ Tuple "scale" "1"
+  , Tuple "directionX" "Right"
+  , Tuple "directionY" "Down"
   ]

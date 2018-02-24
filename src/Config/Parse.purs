@@ -15,6 +15,26 @@ parseInt k s = case fromString s of
     Just i -> pure i
     Nothing -> k.throw "Error parsing int."
 
+parseDirectionX :: forall f r.
+                   Applicative f =>
+                   { throw :: forall a. String -> f a
+                   | r } ->
+                   String -> f DirectionX
+parseDirectionX k s = case s of
+    "Left" -> pure XLeft
+    "Right" -> pure XRight
+    _ -> k.throw "Error parsing directionX."
+
+parseDirectionY :: forall f r.
+                   Applicative f =>
+                   { throw :: forall a. String -> f a
+                   | r } ->
+                   String -> f DirectionY
+parseDirectionY k s = case s of
+    "Up" -> pure YUp
+    "Down" -> pure YDown
+    _ -> k.throw "Error parsing directionY."
+
 mkConfig :: forall l f r.
             Functor l => Traversable l =>
             Monad f =>
@@ -29,9 +49,13 @@ mkConfig k defaults configLines = do
   scaleX <- for (findOptValue "scaleX" map) (parseInt k)
   scaleY <- for (findOptValue "scaleY" map) (parseInt k)
   scale <- findReqValue "scale" map >>= parseInt k
+  directionX <- findReqValue "directionX" map >>= parseDirectionX k
+  directionY <- findReqValue "directionY" map >>= parseDirectionY k
   pure { scale: scale
        , scaleX: scaleX
        , scaleY: scaleY
+       , directionX: directionX
+       , directionY: directionY
        }
   where
     findReqValue :: String -> Map.Map String String -> f String
