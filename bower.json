@@ -15,7 +15,9 @@
     "purescript-strings": "^3.5.0",
     "purescript-node-fs": "^4.0.0",
     "purescript-argonaut": "^3.1.0",
-    "purescript-argonaut-generic": "^1.2.0"
+    "purescript-argonaut-generic": "^1.2.0",
+    "purescript-record": "^0.2.6",
+    "purescript-exists": "^3.0.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^3.0.0"

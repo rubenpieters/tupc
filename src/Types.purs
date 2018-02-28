@@ -1,12 +1,16 @@
 module Types (module Types, module Exported) where
 
 import Prelude as Exported
+
+import SubRecord as Exported
+
 import Data.Array (uncons, cons) as Exported
 import Data.Maybe as Exported
 import Data.Tuple as Exported
 import Data.Either as Exported
 import Data.Foldable as Exported
 import Data.Traversable as Exported
+
 
 import Control.Monad.Eff as Exported
 import Control.Monad.Eff.Console (log, logShow) as Exported
@@ -15,14 +19,19 @@ import Control.Monad.Eff.Exception (throw) as Exported
 
 import Prelude
 
+import SubRecord
+
 import Data.Maybe
 import Data.Tuple
 import Data.Map as Map
+import Data.Exists
 
 import Data.Argonaut (class EncodeJson, class DecodeJson, decodeJson, (:=), (~>), (.?))
 import Data.Generic.Rep as Rep
 import Data.Generic.Rep.Eq (genericEq)
 import Data.Generic.Rep.Show (genericShow)
+
+import Data.Record.Builder
 
 data DirectionX
   = XLeft
@@ -102,6 +111,37 @@ instance decodeJsonPos :: DecodeJson Pos where
     yTop <- obj .? "yTop"
     yBot <- obj .? "yBot"
     pure $ Pos { xLeft, xRight, yTop, yBot }
+
+type OptParams r =
+  ( scale :: Int
+  , scaleX :: Maybe Int
+  , scaleY :: Maybe Int
+  , ignore :: Array Char
+  , ignoreExtra :: Array Char
+  , originX :: DirectionX
+  , originY :: DirectionY
+  , directionX :: DirectionX
+  , directionY :: DirectionY
+  | r )
+
+tupcDefaultsRecord :: JsonConfig
+tupcDefaultsRecord =
+  { scale: 1
+  , scaleX: Nothing
+  , scaleY: Nothing
+  , ignore: ['+', '-', '|', ' ']
+  , ignoreExtra: []
+  , originX: XLeft
+  , originY: YUp
+  , directionX: XRight
+  , directionY: YDown
+  }
+
+tupcAddDefaults :: forall r s.
+                   Subrow s (OptParams ()) =>
+                   Union s (OptParams ()) (OptParams r) =>
+                   Record s -> Record (OptParams r)
+tupcAddDefaults r1 = build (merge tupcDefaultsRecord) r1
 
 tupcDefaults :: Map.Map String String
 tupcDefaults = Map.fromFoldable

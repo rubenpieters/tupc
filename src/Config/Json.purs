@@ -22,3 +22,4 @@ parseJsonConfigContent k { jsonConfig: jsonConfig, content: content } = do
 
 mapPosToJson :: Map.Map String Pos -> Json
 mapPosToJson map = encodeJson map
+

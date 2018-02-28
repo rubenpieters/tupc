@@ -7,6 +7,7 @@ import Tupc
 
 import Test.Config.File as Test.Config.File
 import Test.Config.Json as Test.Config.Json
+import Test.SubRecord as Test.SubRecord
 
 import Data.Map as Map
 
@@ -47,5 +48,9 @@ main = do
   assert $ testConfig'.scaleY == Just 100
   fileMap <- testReadFile
   assert $ fileMap == manualMapScaled
+  log "Test.Config.File"
   Test.Config.File.main
+  log "Test.Config.Json"
   Test.Config.Json.main
+  log "Test.SubRecord"
+  Test.SubRecord.main
