@@ -1,7 +1,5 @@
 module SubRecord where
 
-import Data.Maybe
-import Data.Symbol
 import Data.Record.Builder
 
 import Unsafe.Coerce

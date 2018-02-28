@@ -16,7 +16,6 @@ import Control.Monad.Eff as Exported
 import Control.Monad.Eff.Console (log, logShow) as Exported
 import Control.Monad.Eff.Exception (throw) as Exported
 
-
 import Prelude
 
 import SubRecord
@@ -24,8 +23,6 @@ import SubRecord
 import Data.Maybe
 import Data.Tuple
 import Data.Map as Map
-import Data.Exists
-
 import Data.Argonaut (class EncodeJson, class DecodeJson, decodeJson, (:=), (~>), (.?))
 import Data.Generic.Rep as Rep
 import Data.Generic.Rep.Eq (genericEq)
