@@ -12,8 +12,11 @@ parseJsonConfigContent :: forall f r.
                           Monad f =>
                           { throw :: forall a. String -> f a
                           | r } ->
-                          JsonConfigContent -> f (Map.Map Char Pos)
+--                          { jsonConfig: SubRow JsonConfig, content: Content } ->
+                          JsonConfigContent ->
+                          f (Map.Map Char Pos)
 parseJsonConfigContent k { jsonConfig: jsonConfig, content: content } = do
+--  let jsonConfig = subJsonConfig # withDefaults tupcDefaultsRecord
   let contentArray = content <#> toCharArray
   let ignored = jsonConfig.ignore <> jsonConfig.ignoreExtra
   let unprocessedMapPos = contentArray # toMapPos ignored
