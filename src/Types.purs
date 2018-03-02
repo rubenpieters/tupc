@@ -2,23 +2,19 @@ module Types (module Types, module Exported) where
 
 import Prelude as Exported
 
-import SubRecord as Exported
-
 import Data.Array (uncons, cons) as Exported
 import Data.Maybe as Exported
 import Data.Tuple as Exported
 import Data.Either as Exported
 import Data.Foldable as Exported
 import Data.Traversable as Exported
-
+import Data.SubRecord as Exported
 
 import Control.Monad.Eff as Exported
 import Control.Monad.Eff.Console (log, logShow) as Exported
 import Control.Monad.Eff.Exception (throw) as Exported
 
 import Prelude
-
-import SubRecord
 
 import Data.Maybe
 import Data.Tuple
@@ -134,8 +130,8 @@ tupcDefaultsRecord =
   , directionY: YDown
   }
 
-tupcAddDefaults :: forall r s.
-                   Subrow s (OptParams ()) =>
+tupcAddDefaults :: forall r x s.
+                   Union s x (OptParams ()) =>
                    Union s (OptParams ()) (OptParams r) =>
                    Record s -> Record (OptParams r)
 tupcAddDefaults r1 = build (merge tupcDefaultsRecord) r1
