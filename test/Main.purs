@@ -9,6 +9,7 @@ import Test.Config.File as Test.Config.File
 import Test.Config.Json as Test.Config.Json
 
 import Data.Map as Map
+import Data.SubRecord as SubRecord
 
 import Node.Encoding (Encoding(..))
 import Node.FS.Sync (readTextFile)
@@ -22,8 +23,8 @@ testData =
   , ['2', '2', '2']
   ]
 
-testConfig :: Eff _ JsonConfig
-testConfig = mkConfig { throw: throw } tupcDefaults ["scaleX = 50", "scaleY = 100"]
+testConfig :: Eff _ (SubRecord OptParams)
+testConfig = mkConfig { throw: throw } ["scaleX = 50", "scaleY = 100"]
 
 testReadFile :: Eff _ (Map.Map Char Pos)
 testReadFile = parseRaw { throw: throw, rawContents: readTextFile UTF8 "examples/test1.txt"}
@@ -45,8 +46,8 @@ main = do
   assert $ calcMap == manualMap
   testConfig' <- testConfig
   log "testConfig'"
-  assert $ testConfig'.scaleX == Just 50
-  assert $ testConfig'.scaleY == Just 100
+  assert $ SubRecord.get (SProxy :: SProxy "scaleX") testConfig' == Just (Just 50)
+  assert $ SubRecord.get (SProxy :: SProxy "scaleY") testConfig' == Just (Just 100)
   fileMap <- testReadFile
   log (show fileMap)
   log (show manualMapScaled)

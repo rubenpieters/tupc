@@ -8,7 +8,8 @@ import Data.Tuple as Exported
 import Data.Either as Exported
 import Data.Foldable as Exported
 import Data.Traversable as Exported
-import Data.SubRecord as Exported
+import Data.SubRecord (SubRecord) as Exported
+import Data.Symbol as Exported
 
 import Control.Monad.Eff as Exported
 import Control.Monad.Eff.Console (log, logShow) as Exported
@@ -23,6 +24,7 @@ import Data.Argonaut (class EncodeJson, class DecodeJson, decodeJson, (:=), (~>)
 import Data.Generic.Rep as Rep
 import Data.Generic.Rep.Eq (genericEq)
 import Data.Generic.Rep.Show (genericShow)
+import Data.SubRecord
 
 import Data.Record.Builder
 
@@ -78,6 +80,11 @@ type JsonConfigContent =
   , content :: Content
   }
 
+type SubJsonConfigContent =
+  { subJsonConfig :: SubRecord OptParams
+  , content :: Content
+  }
+
 newtype Pos = Pos
   { xLeft :: Int
   , xRight :: Int
@@ -105,7 +112,7 @@ instance decodeJsonPos :: DecodeJson Pos where
     yBot <- obj .? "yBot"
     pure $ Pos { xLeft, xRight, yTop, yBot }
 
-type OptParams r =
+type OptParams =
   ( scale :: Int
   , scaleX :: Maybe Int
   , scaleY :: Maybe Int
@@ -115,7 +122,7 @@ type OptParams r =
   , originY :: DirectionY
   , directionX :: DirectionX
   , directionY :: DirectionY
-  | r )
+  )
 
 tupcDefaultsRecord :: JsonConfig
 tupcDefaultsRecord =
@@ -129,12 +136,6 @@ tupcDefaultsRecord =
   , directionX: XRight
   , directionY: YDown
   }
-
-tupcAddDefaults :: forall r x s.
-                   Union s x (OptParams ()) =>
-                   Union s (OptParams ()) (OptParams r) =>
-                   Record s -> Record (OptParams r)
-tupcAddDefaults r1 = build (merge tupcDefaultsRecord) r1
 
 tupcDefaults :: Map.Map String String
 tupcDefaults = Map.fromFoldable

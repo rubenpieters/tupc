@@ -4,23 +4,25 @@ import Types
 import Config.Json
 
 import Data.Map as Map
+import Data.SubRecord as SubRecord
 
 import Test.Assert
 
 -- example 1 -- parseJsonConfigContent
 
-testExample1Data :: JsonConfigContent
+testExample1Data :: SubJsonConfigContent
 testExample1Data =
-  { jsonConfig: { scale: 50
-                , scaleX: Nothing
-                , scaleY: Nothing
-                , directionX: XRight
-                , directionY: YDown
-                , originX: XLeft
-                , originY: YUp
-                , ignore: []
-                , ignoreExtra: []
-                }
+  { subJsonConfig: SubRecord.mkSubRecord
+      { scale: 50
+      , scaleX: Nothing
+      , scaleY: Nothing
+      , directionX: XRight
+      , directionY: YDown
+      , originX: XLeft
+      , originY: YUp
+      , ignore: []
+      , ignoreExtra: []
+      }
   , content: ["113", "113", "222"] }
 
 testExample1_parseJsonConfigContent :: Either String (Map.Map Char Pos)

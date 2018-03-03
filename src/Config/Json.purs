@@ -7,16 +7,17 @@ import Config.Apply
 import Data.Map as Map
 import Data.String (toCharArray)
 import Data.Argonaut (Json, encodeJson)
+import Data.SubRecord as SubRecord
 
 parseJsonConfigContent :: forall f r.
                           Monad f =>
                           { throw :: forall a. String -> f a
                           | r } ->
 --                          { jsonConfig: SubRow JsonConfig, content: Content } ->
-                          JsonConfigContent ->
+                          { subJsonConfig :: SubRecord OptParams, content :: Content } ->
                           f (Map.Map Char Pos)
-parseJsonConfigContent k { jsonConfig: jsonConfig, content: content } = do
---  let jsonConfig = subJsonConfig # withDefaults tupcDefaultsRecord
+parseJsonConfigContent k { subJsonConfig: subJsonConfig, content: content } = do
+  let jsonConfig = subJsonConfig # SubRecord.withDefaults tupcDefaultsRecord
   let contentArray = content <#> toCharArray
   let ignored = jsonConfig.ignore <> jsonConfig.ignoreExtra
   let unprocessedMapPos = contentArray # toMapPos ignored

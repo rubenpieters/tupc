@@ -33,11 +33,11 @@ rawToJsonConfigContent :: forall f r.
                           { throw :: forall a. String -> f a
                           , rawContents :: f String
                           | r } ->
-                          f JsonConfigContent
+                          f SubJsonConfigContent
 rawToJsonConfigContent k = do
   { config: config, content: content } <- rawToConfigContent k
-  jsonConfig <- mkConfig k tupcDefaults config
-  pure { jsonConfig: jsonConfig, content: content }
+  subJsonConfig <- mkConfig k config
+  pure { subJsonConfig: subJsonConfig, content: content }
 
 writeMapPosToFile :: forall f r.
                      Monad f =>

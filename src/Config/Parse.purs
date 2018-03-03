@@ -5,6 +5,8 @@ import Types
 import Data.Map as Map
 import Data.Int (fromString)
 import Data.String (Pattern(..), split, trim, joinWith, toCharArray)
+import Data.SubRecord as SubRecord
+import Data.SubRecord.Builder as SubRecord
 
 parseInt :: forall f r.
             Applicative f =>
@@ -40,44 +42,34 @@ mkConfig :: forall l f r.
             Monad f =>
             { throw :: forall a. String -> f a
             | r } ->
-            Map.Map String String -> l String -> f JsonConfig
-mkConfig k defaults configLines = do
+            l String -> f (SubRecord OptParams)
+mkConfig k configLines = do
   let result = configLines <#> split (Pattern "=")
                            <#> (_ <#> trim)
   result' <- for result (mkConfigKeyVal k)
   let map = Map.fromFoldable result'
-  scaleX <- for (findOptValue "scaleX" map) (parseInt k)
-  scaleY <- for (findOptValue "scaleY" map) (parseInt k)
-  scale <- findReqValue "scale" map >>= parseInt k
-  directionX <- findReqValue "directionX" map >>= parseDirectionX k
-  directionY <- findReqValue "directionY" map >>= parseDirectionY k
-  originX <- findReqValue "originX" map >>= parseDirectionX k
-  originY <- findReqValue "originY" map >>= parseDirectionY k
-  ignore <- findReqValue "ignore" map <#> toCharArray
-  ignoreExtra <- findReqValue "ignoreExtra" map <#> toCharArray
-  pure { scale: scale
-       , scaleX: scaleX
-       , scaleY: scaleY
-       , directionX: directionX
-       , directionY: directionY
-       , originX: originX
-       , originY: originY
-       , ignore: ignore
-       , ignoreExtra: ignoreExtra
-       }
-  where
-    findReqValue :: String -> Map.Map String String -> f String
-    findReqValue key map = case map # Map.lookup key of
-        Just val -> pure val
-        Nothing -> orDefault key
-    orDefault :: String -> f String
-    orDefault key = case defaults # Map.lookup key of
-        Just val -> pure val
-        Nothing -> k.throw ("No value given for/no default value for" <> show key <> ". Proposed action: provide value")
-    findOptValue :: String -> Map.Map String String -> Maybe String
-    findOptValue key map = case map # Map.lookup key of
-        Just val -> Just val
-        Nothing -> Nothing
+  let at x = map # Map.lookup x
+  scale <- for (at "scale") (parseInt k)
+  scaleX <- for (at "scaleX") (parseInt k)
+  scaleY <- for (at "scaleY") (parseInt k)
+  directionX <- for (at "directionX") (parseDirectionX k)
+  directionY <- for (at "directionY") (parseDirectionY k)
+  originX <- for (at "originX") (parseDirectionX k)
+  originY <- for (at "originY") (parseDirectionY k)
+  let ignore = at "ignore" <#> toCharArray
+  let ignoreExtra = at "ignoreExtra" <#> toCharArray
+  pure $
+    SubRecord.build
+    ( SubRecord.insert (SProxy :: SProxy "scale") scale >>>
+      SubRecord.insert (SProxy :: SProxy "scaleX") (Just scaleX) >>>
+      SubRecord.insert (SProxy :: SProxy "scaleY") (Just scaleY) >>>
+      SubRecord.insert (SProxy :: SProxy "directionX") directionX >>>
+      SubRecord.insert (SProxy :: SProxy "directionY") directionY >>>
+      SubRecord.insert (SProxy :: SProxy "originX") originX >>>
+      SubRecord.insert (SProxy :: SProxy "originY") originY >>>
+      SubRecord.insert (SProxy :: SProxy "ignore") ignore >>>
+      SubRecord.insert (SProxy :: SProxy "ignoreExtra") ignoreExtra
+    ) (SubRecord.mkSubRecord {})
 
 type ConfigKeyVal = Tuple String String
 
