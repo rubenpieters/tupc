@@ -26,8 +26,6 @@ import Data.Generic.Rep.Eq (genericEq)
 import Data.Generic.Rep.Show (genericShow)
 import Data.SubRecord
 
-import Data.Record.Builder
-
 data DirectionX
   = XLeft
   | XRight
