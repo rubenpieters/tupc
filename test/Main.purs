@@ -27,7 +27,7 @@ testConfig :: Eff _ (SubRecord OptParams)
 testConfig = mkConfig { throw: throw } ["scaleX = 50", "scaleY = 100"]
 
 testReadFile :: Eff _ (Map.Map Char Pos)
-testReadFile = parseRaw { throw: throw, rawContents: readTextFile UTF8 "examples/test1.txt"}
+testReadFile = fromFileUTF8 { throw: throw } "examples/test1.txt"
 
 main :: Eff _ Unit
 main = do

@@ -2,12 +2,11 @@ module Config.Apply where
 
 import Types
 
-import Data.Map as Map
-
-applyConfig :: forall a.
-               JsonConfig ->
-               { maxX :: Int, maxY :: Int } ->
-               Map.Map a Pos -> Map.Map a Pos
+applyConfig ::
+  forall a.
+  JsonConfig ->
+  { maxX :: Int, maxY :: Int } ->
+  Map a Pos -> Map a Pos
 applyConfig jsonConfig bounds mapPos = mapPos <#> f
   where
     scale = jsonConfig.scale

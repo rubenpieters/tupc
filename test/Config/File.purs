@@ -15,7 +15,7 @@ testExample1Data = ["# scaleX = 50", "# scaleY = 50", "113", "113", "222"] # joi
 
 testExample1_rawToJsonConfigContent :: Either String SubJsonConfigContent
 testExample1_rawToJsonConfigContent =
-  rawToJsonConfigContent { throw: Left, rawContents: pure testExample1Data }
+  rawToJsonConfigContent { throw: Left, fileContent: pure testExample1Data }
 
 testExample1Output :: forall a. Either a SubJsonConfigContent
 testExample1Output = Right

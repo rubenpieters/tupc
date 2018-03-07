@@ -10,6 +10,7 @@ import Data.Foldable as Exported
 import Data.Traversable as Exported
 import Data.SubRecord (SubRecord) as Exported
 import Data.Symbol as Exported
+import Data.Map (Map) as Exported
 
 import Control.Monad.Eff as Exported
 import Control.Monad.Eff.Console (log, logShow) as Exported
@@ -19,32 +20,33 @@ import Prelude
 
 import Data.Maybe
 import Data.Tuple
+import Data.Map (Map)
 import Data.Map as Map
 import Data.Argonaut (class EncodeJson, class DecodeJson, decodeJson, (:=), (~>), (.?))
-import Data.Generic.Rep as Rep
-import Data.Generic.Rep.Eq (genericEq)
-import Data.Generic.Rep.Show (genericShow)
+import Data.Generic.Rep (class Generic)
+import Data.Generic.Rep.Eq as Rep
+import Data.Generic.Rep.Show as Rep
 import Data.SubRecord
 
 data DirectionX
   = XLeft
   | XRight
 
-derive instance genericDirectionX :: Rep.Generic DirectionX _
+derive instance genericDirectionX :: Generic DirectionX _
 instance eqDirectionX :: Eq DirectionX where
-  eq = genericEq
+  eq = Rep.genericEq
 instance showDirectionX :: Show DirectionX where
-  show = genericShow
+  show = Rep.genericShow
 
 data DirectionY
   = YUp
   | YDown
 
-derive instance genericDirectionY :: Rep.Generic DirectionY _
+derive instance genericDirectionY :: Generic DirectionY _
 instance eqDirectionY :: Eq DirectionY where
-  eq = genericEq
+  eq = Rep.genericEq
 instance showDirectionY :: Show DirectionY where
-  show = genericShow
+  show = Rep.genericShow
 
 -- raw json representation of configuration parameters
 type JsonConfig =
@@ -90,11 +92,11 @@ newtype Pos = Pos
   , yBot :: Int
   }
 
-derive instance genericPos :: Rep.Generic Pos _
+derive instance genericPos :: Generic Pos _
 instance eqPos :: Eq Pos where
-  eq = genericEq
+  eq = Rep.genericEq
 instance showPos :: Show Pos where
-  show = genericShow
+  show = Rep.genericShow
 instance encodeJsonPos :: EncodeJson Pos where
   encodeJson (Pos pos) =
     "xLeft" := pos.xLeft
@@ -135,7 +137,7 @@ tupcDefaultsRecord =
   , directionY: YDown
   }
 
-tupcDefaults :: Map.Map String String
+tupcDefaults :: Map String String
 tupcDefaults = Map.fromFoldable
   [ Tuple "scale" "1"
   , Tuple "directionX" "Right"
