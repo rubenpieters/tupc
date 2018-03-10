@@ -1,5 +1,12 @@
 {
-  "name": "tupc",
+  "name": "purescript-tupc",
+  "homepage": "https://github.com:rubenpieters/tupc",
+  "description": "textbased ui position configuration",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rubenpieters/tupc.git"
+  },
   "ignore": [
     "**/.*",
     "node_modules",
