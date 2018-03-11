@@ -29,8 +29,8 @@ import Data.Generic.Rep.Show as Rep
 import Data.SubRecord
 
 data DirectionX
-  = XLeft
-  | XRight
+  = DirXLeft
+  | DirXRight
 
 derive instance genericDirectionX :: Generic DirectionX _
 instance eqDirectionX :: Eq DirectionX where
@@ -39,13 +39,33 @@ instance showDirectionX :: Show DirectionX where
   show = Rep.genericShow
 
 data DirectionY
-  = YUp
-  | YDown
+  = DirYUp
+  | DirYDown
 
 derive instance genericDirectionY :: Generic DirectionY _
 instance eqDirectionY :: Eq DirectionY where
   eq = Rep.genericEq
 instance showDirectionY :: Show DirectionY where
+  show = Rep.genericShow
+
+data OriginX
+  = OriXLeft
+  | OriXRight
+
+derive instance genericOriginX :: Generic OriginX _
+instance eqOriginX :: Eq OriginX where
+  eq = Rep.genericEq
+instance showOriginX :: Show OriginX where
+  show = Rep.genericShow
+
+data OriginY
+  = OriYUp
+  | OriYDown
+
+derive instance genericOriginY :: Generic OriginY _
+instance eqOriginY :: Eq OriginY where
+  eq = Rep.genericEq
+instance showOriginY :: Show OriginY where
   show = Rep.genericShow
 
 -- raw json representation of configuration parameters
@@ -55,8 +75,8 @@ type JsonConfig =
   , scaleY :: Maybe Int
   , ignore :: Array Char
   , ignoreExtra :: Array Char
-  , originX :: DirectionX
-  , originY :: DirectionY
+  , originX :: OriginX
+  , originY :: OriginY
   , directionX :: DirectionX
   , directionY :: DirectionY
   }
@@ -112,14 +132,31 @@ instance decodeJsonPos :: DecodeJson Pos where
     yBot <- obj .? "yBot"
     pure $ Pos { xLeft, xRight, yTop, yBot }
 
+newtype EnrichedPos = EnrichedPos
+  { xLeft :: Int
+  , xRight :: Int
+  , yTop :: Int
+  , yBot :: Int
+  , xWidth :: Int
+  , yHeight :: Int
+  , xCenter :: Int
+  , yCenter :: Int
+  }
+
+derive instance genericEnrichedPos :: Generic EnrichedPos _
+instance eqEnrichedPos :: Eq EnrichedPos where
+  eq = Rep.genericEq
+instance showEnrichedPos :: Show EnrichedPos where
+  show = Rep.genericShow
+
 type OptParams =
   ( scale :: Int
   , scaleX :: Maybe Int
   , scaleY :: Maybe Int
   , ignore :: Array Char
   , ignoreExtra :: Array Char
-  , originX :: DirectionX
-  , originY :: DirectionY
+  , originX :: OriginX
+  , originY :: OriginY
   , directionX :: DirectionX
   , directionY :: DirectionY
   )
@@ -131,10 +168,10 @@ tupcDefaultsRecord =
   , scaleY: Nothing
   , ignore: ['+', '-', '|', ' ']
   , ignoreExtra: []
-  , originX: XLeft
-  , originY: YUp
-  , directionX: XRight
-  , directionY: YDown
+  , originX: OriXLeft
+  , originY: OriYUp
+  , directionX: DirXRight
+  , directionY: DirYDown
   }
 
 tupcDefaults :: Map String String

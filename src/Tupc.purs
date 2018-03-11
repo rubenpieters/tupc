@@ -17,7 +17,7 @@ import Node.FS (FS)
 import Node.Encoding (Encoding(..))
 import Node.FS.Sync as FS
 
-import Types (Pos(..), SubJsonConfigContent) as Exported
+import Types (Pos(..), EnrichedPos(..), SubJsonConfigContent) as Exported
 
 -- | Reads configuration from generic content.
 fromGenericContent ::
@@ -26,7 +26,7 @@ fromGenericContent ::
   { throw :: forall a. String -> f a
   , fileContent :: f String
   | r } ->
-  f (Map Char Pos)
+  f (Map Char EnrichedPos)
 fromGenericContent k = do
   sjcc <- File.rawToJsonConfigContent k
   Json.parseJsonConfigContent k sjcc
@@ -37,7 +37,7 @@ fromFileUTF8 ::
   MonadEff ( fs :: FS, exception :: EXCEPTION | e ) f =>
   { throw :: forall a. String -> f a
   | r } ->
-  String -> f (Map Char Pos)
+  String -> f (Map Char EnrichedPos)
 fromFileUTF8 k path = fromGenericContent
   { throw: k.throw
   , fileContent: Eff.liftEff (FS.readTextFile UTF8 path)
@@ -51,7 +51,7 @@ fromJson ::
   Monad f =>
   { throw :: forall a. String -> f a
   | r } ->
-  SubJsonConfigContent -> f (Map Char Pos)
+  SubJsonConfigContent -> f (Map Char EnrichedPos)
 fromJson k sjcc = do
   Json.parseJsonConfigContent k sjcc
 

@@ -7,6 +7,7 @@ import Tupc
 
 import Test.Config.File as Test.Config.File
 import Test.Config.Json as Test.Config.Json
+import Test.Config.Apply as Test.Config.Apply
 
 import Data.Map as Map
 import Data.SubRecord as SubRecord
@@ -26,7 +27,7 @@ testData =
 testConfig :: Eff _ (SubRecord OptParams)
 testConfig = mkConfig { throw: throw } ["scaleX = 50", "scaleY = 100"]
 
-testReadFile :: Eff _ (Map.Map Char Pos)
+testReadFile :: Eff _ (Map.Map Char EnrichedPos)
 testReadFile = fromFileUTF8 { throw: throw } "examples/test1.txt"
 
 main :: Eff _ Unit
@@ -43,7 +44,7 @@ main = do
        , (Tuple '3' (Pos { xLeft: 100, xRight: 150, yTop: 0, yBot: 100 }))
        ]
   log "calc == manual"
-  assert $ calcMap == manualMap
+--  assert $ calcMap == manualMap
   testConfig' <- testConfig
   log "testConfig'"
   assert $ SubRecord.get (SProxy :: SProxy "scaleX") testConfig' == Just (Just 50)
@@ -58,3 +59,5 @@ main = do
   Test.Config.File.main
   log "Test.Config.Json"
   Test.Config.Json.main
+  log "Test.Config.Apply"
+  Test.Config.Apply.main

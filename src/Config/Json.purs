@@ -15,7 +15,7 @@ parseJsonConfigContent ::
   { throw :: forall a. String -> f a
   | r } ->
   { subJsonConfig :: SubRecord OptParams, content :: Content } ->
-  f (Map Char Pos)
+  f (Map Char EnrichedPos)
 parseJsonConfigContent k { subJsonConfig: subJsonConfig, content: content } = do
   let jsonConfig = subJsonConfig # SubRecord.withDefaults tupcDefaultsRecord
   let contentArray = content <#> String.toCharArray

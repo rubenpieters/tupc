@@ -26,8 +26,8 @@ parseDirectionX ::
   | r } ->
   String -> f DirectionX
 parseDirectionX k s = case s of
-  "Left" -> pure XLeft
-  "Right" -> pure XRight
+  "Left" -> pure DirXLeft
+  "Right" -> pure DirXRight
   _ -> k.throw "Error parsing directionX."
 
 parseDirectionY ::
@@ -37,9 +37,31 @@ parseDirectionY ::
   | r } ->
   String -> f DirectionY
 parseDirectionY k s = case s of
-  "Up" -> pure YUp
-  "Down" -> pure YDown
+  "Up" -> pure DirYUp
+  "Down" -> pure DirYDown
   _ -> k.throw "Error parsing directionY."
+
+parseOriginX ::
+  forall f r.
+  Applicative f =>
+  { throw :: forall a. String -> f a
+  | r } ->
+  String -> f OriginX
+parseOriginX k s = case s of
+  "Left" -> pure OriXLeft
+  "Right" -> pure OriXRight
+  _ -> k.throw "Error parsing originX."
+
+parseOriginY ::
+  forall f r.
+  Applicative f =>
+  { throw :: forall a. String -> f a
+  | r } ->
+  String -> f OriginY
+parseOriginY k s = case s of
+  "Up" -> pure OriYUp
+  "Down" -> pure OriYDown
+  _ -> k.throw "Error parsing originY."
 
 mkConfig ::
   forall l f r.
@@ -59,8 +81,8 @@ mkConfig k configLines = do
   scaleY <- for (at "scaleY") (parseInt k)
   directionX <- for (at "directionX") (parseDirectionX k)
   directionY <- for (at "directionY") (parseDirectionY k)
-  originX <- for (at "originX") (parseDirectionX k)
-  originY <- for (at "originY") (parseDirectionY k)
+  originX <- for (at "originX") (parseOriginX k)
+  originY <- for (at "originY") (parseOriginY k)
   let ignore = at "ignore" <#> String.toCharArray
   let ignoreExtra = at "ignoreExtra" <#> String.toCharArray
   pure $
