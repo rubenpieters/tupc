@@ -1,6 +1,6 @@
 module Config.Json where
 
-import Types
+import Tupc.Internal
 import Content.Parse as Parse
 import Config.Apply as Apply
 

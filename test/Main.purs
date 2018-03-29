@@ -1,6 +1,6 @@
 module Test.Main where
 
-import Types
+import Tupc.Internal
 import Content.Parse
 import Config.Parse
 import Tupc

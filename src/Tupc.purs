@@ -3,7 +3,7 @@ module Tupc
   , module Tupc
   ) where
 
-import Types
+import Tupc.Internal
 import Config.File as File
 import Config.Json as Json
 
@@ -17,7 +17,7 @@ import Node.FS (FS)
 import Node.Encoding (Encoding(..))
 import Node.FS.Sync as FS
 
-import Types (Pos(..), EnrichedPos(..), SubJsonConfigContent) as Exported
+import Tupc.Internal (Pos(..), EnrichedPos(..), SubJsonConfigContent) as Exported
 
 -- | Reads configuration from generic content.
 fromGenericContent ::

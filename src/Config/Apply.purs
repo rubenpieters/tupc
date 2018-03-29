@@ -1,6 +1,6 @@
 module Config.Apply where
 
-import Types
+import Tupc.Internal
 
 applyConfig ::
   forall a.

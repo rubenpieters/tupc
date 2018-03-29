@@ -1,6 +1,6 @@
 module Test.Config.Json where
 
-import Types
+import Tupc.Internal
 import Config.Json
 
 import Data.Map as Map

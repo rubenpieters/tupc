@@ -1,6 +1,6 @@
 module Config.File where
 
-import Types
+import Tupc.Internal
 import Config.Parse as Parse
 
 import Data.Array as Array

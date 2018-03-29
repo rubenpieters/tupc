@@ -1,6 +1,6 @@
 module Content.Parse where
 
-import Types
+import Tupc.Internal
 
 import Data.Array as Array
 import Data.Map as Map

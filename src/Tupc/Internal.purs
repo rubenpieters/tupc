@@ -1,4 +1,4 @@
-module Types (module Types, module Exported) where
+module Tupc.Internal (module Tupc.Internal, module Exported) where
 
 import Prelude as Exported
 

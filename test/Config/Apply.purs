@@ -1,6 +1,6 @@
 module Test.Config.Apply where
 
-import Types
+import Tupc.Internal
 import Content.Parse
 import Config.Apply
 

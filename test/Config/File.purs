@@ -1,6 +1,6 @@
 module Test.Config.File where
 
-import Types
+import Tupc.Internal
 import Config.File
 
 import Data.SubRecord as SubRecord

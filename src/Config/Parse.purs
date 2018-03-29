@@ -1,6 +1,6 @@
 module Config.Parse where
 
-import Types
+import Tupc.Internal
 
 import Data.Map as Map
 import Data.Int as Int
